@@ -41,47 +41,47 @@ void setup()
   // Window settings
   size(1080, 720);
   background(255);
-  
+
   // Set status position
   pos = 0;
-  
+
   // Set sizes
   posX = width * .125;
   posY = height * .125;
   sizeX = width * .75;
-  
+
   // Text settings
   textAlign(LEFT, TOP);
-  
+
   // Audio settings
   minim = new Minim(this);
   input = minim.getLineIn(Minim.STEREO, 512);
-  
+
   // Twitter configuration
   ConfigurationBuilder cb = new ConfigurationBuilder();
   cb.setOAuthConsumerKey(CONSUMER_KEY);
   cb.setOAuthConsumerSecret(CONSUMER_SECRET);
   cb.setOAuthAccessToken(ACCESS_TOKEN);
   cb.setOAuthAccessTokenSecret(ACCESS_SECRET);
-  
+
   // Connect to Twitter
   twitter = new TwitterFactory(cb.build()).getInstance();
-  
+
   try {
-    
+
     // Get statuses
     // Query query = new Query("#trump");
     // QueryResult res = twitter.search(query);
     // hashtags = res.getTweets();
     timeline = twitter.getUserTimeline("realDonaldTrump", new Paging(1, STATUS_COUNT));
-  
+
     // Get fonts
     getFonts();
-    
+
     // Display statuses
     setNextStatus();
-    
-  } catch (TwitterException e) {
+  } 
+  catch (TwitterException e) {
     println("Connection to Twitter failed.");
   }
 }
@@ -94,12 +94,12 @@ void draw()
     if (pos >= timeline.size()) {
       pos = 0;
     }
-  
-    backgroundCol();
-    displayStatuses();
-    explode();
+
+    //backgroundCol();
+    //displayStatuses();
+    //explode();
     //changePixels();
-    bAd.draw();
+    //bAd.draw();
   }
 }
 
@@ -108,8 +108,8 @@ void keyTyped()
   if (key == ' ') {
     setNextStatus();
     searchAd();
-   // if
-   // bAd.theWord = (" ");
+    // if
+    // bAd.theWord = (" ");
   }
 }
 
@@ -117,29 +117,30 @@ void changePixels()
 {
   // Get input audio volume
   float volume = getAudioVolume();
-  
+
   // Set move borders
   int pixelCenter = pixelWidth * (pixelHeight / 2) - (pixelWidth / 2);
   int topBorder = (pixelHeight / 2) - (pixelHeight / 4);
   int bottomBorder = (pixelHeight / 2) + (pixelHeight / 4);
   int leftBorder = (pixelWidth / 2) - (pixelWidth / 6);
   int rightBorder = (pixelWidth / 2) + (pixelWidth / 6);
-  
+
   loadPixels ();
-  
+
   // Move pixels
   for (int i=topBorder; i < bottomBorder; i++)
   {
-    /*for(int n = (i * pixelWidth + leftBorder); n < (i * pixelWidth + rightBorder); n++)
+    for(int n = (i * pixelWidth + leftBorder); n < (i * pixelWidth + rightBorder); n++)
     {
       println(n);
-    }*/
+      if (n - (i * pixelWidth + leftBorder) == 200) break;
+    }
   }
-  
+
   /*int pixelTemp = pixels[pixelCenter];
-  pixels[pixelCenter] = pixels[pixelCenter - (int) volume];
-  pixels[pixelCenter - (int) volume] = pixelTemp;*/
-  
+   pixels[pixelCenter] = pixels[pixelCenter - (int) volume];
+   pixels[pixelCenter - (int) volume] = pixelTemp;*/
+
   updatePixels();
 }
 
@@ -147,17 +148,17 @@ void getFonts()
 {
   // Initialize fonts list
   fonts = new ArrayList<PFont>();
-  
+
   // Get contents
   File data = new File(dataPath(""));
   String[] files = data.list();
-  
+
   // Set fonts
   for (String file : files)
   {
     // Get extension
     String ext = file.substring(file.lastIndexOf('.') + 1).toLowerCase();
-    
+
     // Add font
     if (ext.equals("ttf") || ext.equals("otf")) {
       fonts.add(createFont(file, 14, true));
@@ -171,13 +172,13 @@ void setNextStatus()
   {
     // Get status
     status = (Status) timeline.get(pos++);
-    
+
     // Get text
     text = status.getText();
-    
+
     // Convert line breaks to whitespaces
     text = text.replaceAll("\n", " ");
-    
+
     // Remove URLs
     for (URLEntity url : status.getURLEntities()) {
       text = text.replace(url.getURL(), "");
@@ -185,7 +186,7 @@ void setNextStatus()
     for (MediaEntity media : status.getMediaEntities()) {
       text = text.replace(media.getURL(), "");
     }
-    
+
     // Set font
     PFont font;
     if (fonts != null && fonts.size() > 0) {
@@ -195,11 +196,11 @@ void setNextStatus()
       font = createFont("Arial", 14, true);
     }
     textFont(font);
-    
+
     // Set text size
     textSize = 120 - text.length() / 2;
     textSize(textSize);
-    
+
     // Get text lines
     lines = new ArrayList<String> ();
     int enterPos = 0;
@@ -214,7 +215,7 @@ void setNextStatus()
           s += text.charAt(n);
         }
       }
-      
+
       if (textWidth(s) > sizeX) {
         lines.add(s.substring(0, s.length()-1));
         enterPos = --i;
@@ -222,14 +223,14 @@ void setNextStatus()
         lines.add(s.substring(0, s.length()));
       }
     }
-    
+
     // Get random value for color
     randomCol = (int) random(255);
-    
+
     // Search for adjectives
     searchAd();
   }
-  
+
   backgroundCol();
   displayStatuses();
   changePixels();
@@ -240,7 +241,7 @@ void displayStatuses()
   if (timeline != null)
   {
     // Write text
-    for(int i=0; i < lines.size(); i++) {
+    for (int i=0; i < lines.size(); i++) {
       fill(0);
       text(lines.get(i), posX, posY + (LINE_HEIGHT * i * textSize));
     }
@@ -252,13 +253,13 @@ void backgroundCol()
   // Set calendar time
   Calendar cal = Calendar.getInstance();
   cal.setTime(status.getCreatedAt());
-  
+
   // Get day and hour of status
   int hour = cal.get(Calendar.HOUR);
-  
+
   // Set colors
   int red = 0, blue = 0, green = 0;
-  
+
   if (hour <= 6) {
     red = 255;
     blue = randomCol;
@@ -285,11 +286,11 @@ float getAudioVolume()
 {
   float sum = 0;
   for (int i=0; i < input.bufferSize(); i++) sum += input.mix.get(i);
-  
+
   float average = (sum * AUDIO_SCALE) / input.bufferSize();
   if (average < 0) average *= -1;
   if ((int) average == 0) average++;
-  
+
   return average;
 }
 
@@ -299,7 +300,7 @@ private boolean flotus;
 private float wr, hr;
 
 //search for adjectives
-void searchAd(){
+void searchAd() {
   String[] list = split(text, ' ');
   ArrayList<String> words = new ArrayList<String>(Arrays.asList(list));
   String adList[] = loadStrings("ad_list.txt");
@@ -309,7 +310,7 @@ void searchAd(){
   for (String bw : adList) adjectives.add(bw);
 
   for (String word : words) {
-    
+
     if (adjectives.contains(word)) {
       println("I've got it! - " + word);
       flotus = true;
@@ -321,7 +322,6 @@ void searchAd(){
     } else {
       bAd = new bouncyWord("", 0);
     }
-    
   }
 }
 
@@ -331,40 +331,40 @@ int MAX = 50;
 
 class Particle {
   float r = 2;
-  PVector pos,speed,grav; 
+  PVector pos, speed, grav; 
   ArrayList tail;
   float splash = 5;
   int margin = 2;
   int taillength = 25;
 
   Particle(float tempx, float tempy) {
-    float startx = tempx + random(-splash,splash);
-    float starty = tempy + random(-splash,splash);
-    startx = constrain(startx,0,width);
-    starty = constrain(starty,0,height);
-    float xspeed = random(-3,3);
-    float yspeed = random(-3,3);
+    float startx = tempx + random(-splash, splash);
+    float starty = tempy + random(-splash, splash);
+    startx = constrain(startx, 0, width);
+    starty = constrain(starty, 0, height);
+    float xspeed = random(-3, 3);
+    float yspeed = random(-3, 3);
 
-    pos = new PVector(startx,starty);
-    speed = new PVector(xspeed,yspeed);
-    grav = new PVector(0,0.02);
-    
+    pos = new PVector(startx, starty);
+    speed = new PVector(xspeed, yspeed);
+    grav = new PVector(0, 0.02);
+
     tail = new ArrayList();
   }
 
   void run() {
     pos.add(speed);
 
-    tail.add(new PVector(pos.x,pos.y,0));
-    if(tail.size() > taillength) {
+    tail.add(new PVector(pos.x, pos.y, 0));
+    if (tail.size() > taillength) {
       tail.remove(0);
     }
 
-    float damping = random(-0.5,-0.6);
-    if(pos.x > width - margin || pos.x < margin) {
+    float damping = random(-0.5, -0.6);
+    if (pos.x > width - margin || pos.x < margin) {
       speed.x *= damping;
     }
-    if(pos.y > height -margin) {
+    if (pos.y > height -margin) {
       speed.y *= damping;
     }
   }
@@ -378,43 +378,43 @@ class Particle {
       PVector tempv = (PVector)tail.get(i);
       noStroke();
       fill(6*i + 50);
-      ellipse(tempv.x,tempv.y,r,r);
+      ellipse(tempv.x, tempv.y, r, r);
     }
   }
 }
 
-void explode(){
-  if(flotus /*&& test == true*/){
-    for(int i = 0; i < plist.size(); i++) {
+void explode() {
+  if (flotus /*&& test == true*/) {
+    for (int i = 0; i < plist.size(); i++) {
       Particle p = (Particle) plist.get(i); 
       //makes p a particle equivalent to ith particle in ArrayList
       p.run();
       p.update();
       p.gravity();
     }
-  } 
+  }
 }
 
-void adFound(){
+void adFound() {
   // test = true;
   for (int i = 0; i < MAX; i ++) {
     plist.add(new Particle(wr, hr)); // fill ArrayList with particles
 
-    if(plist.size() > 5*MAX) {
+    if (plist.size() > 5*MAX) {
       plist.remove(0);
     }
   }
 }
 
 public String getWord()
-  {
-    return word;
-  }
+{
+  return word;
+}
 
 class bouncyWord {
   String theWord; 
   float px, py, vx, vy;
-  bouncyWord(String word,float ipx) {
+  bouncyWord(String word, float ipx) {
     theWord = word;
     px=ipx;
     vx=0;
