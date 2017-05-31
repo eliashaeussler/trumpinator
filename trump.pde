@@ -12,7 +12,7 @@ private final String ACCESS_SECRET = "admz1Hhusclk1zeW6hpW76oAMvyowlgIlaHcpGco62
 
 private final int STATUS_COUNT = 200;
 private final float LINE_HEIGHT = 1.2;
-private final int AUDIO_SCALE = 100000;
+private final int AUDIO_SCALE = 50000;
 
 private float posX;
 private float posY;
@@ -100,6 +100,10 @@ void draw()
     //explode();
     //changePixels();
     //bAd.draw();
+    
+    if (frameCount % 60 == 0) {
+      changePixels();
+    }
   }
 }
 
@@ -118,29 +122,43 @@ void changePixels()
   // Get input audio volume
   float volume = getAudioVolume();
 
-  // Set move borders
-  int pixelCenter = pixelWidth * (pixelHeight / 2) - (pixelWidth / 2);
-  int topBorder = (pixelHeight / 2) - (pixelHeight / 4);
-  int bottomBorder = (pixelHeight / 2) + (pixelHeight / 4);
-  int leftBorder = (pixelWidth / 2) - (pixelWidth / 6);
-  int rightBorder = (pixelWidth / 2) + (pixelWidth / 6);
+  // Define pixel shift
+  int pixelCenter = (pixelWidth * pixelHeight / 2) - pixelWidth / 2;
+  int pixelBorder = int((pixelHeight > pixelWidth ? pixelWidth : pixelHeight) * .4);
+  int pixelShiftStep = volume > pixelBorder ? pixelBorder : int(volume); 
 
-  loadPixels ();
-
-  // Move pixels
-  for (int i=topBorder; i < bottomBorder; i++)
+  // Set pixels to be moved
+  ArrayList<Integer> moveRight = new ArrayList<Integer>();
+  ArrayList<Integer> moveLeft = new ArrayList<Integer>();
+  
+  for (int y = -pixelShiftStep, n=0; y <= pixelShiftStep; y++)
   {
-    for(int n = (i * pixelWidth + leftBorder); n < (i * pixelWidth + rightBorder); n++)
-    {
-      println(n);
-      if (n - (i * pixelWidth + leftBorder) == 200) break;
+    // Get center of current line
+    int currentCenter = pixelCenter + y * pixelWidth;
+    
+    // Add pixels to be moved
+    for (int i=currentCenter - n; i <= currentCenter + n; i++) {
+      if (i <= currentCenter) {
+        moveLeft.add(i);
+      } else {
+        moveRight.add(i);
+      }
+    }
+    
+    // Update pixel length
+    if (y < 0) {
+      n++;
+    } else {
+      n--;
     }
   }
 
-  /*int pixelTemp = pixels[pixelCenter];
-   pixels[pixelCenter] = pixels[pixelCenter - (int) volume];
-   pixels[pixelCenter - (int) volume] = pixelTemp;*/
-
+  // Move pixels
+  loadPixels ();
+  for(int pixel : moveRight)
+  {
+    arrayCopy(pixels, pixel, pixels, pixel + 1, 1);
+  }
   updatePixels();
 }
 
@@ -233,7 +251,6 @@ void setNextStatus()
 
   backgroundCol();
   displayStatuses();
-  changePixels();
 }
 
 void displayStatuses()
