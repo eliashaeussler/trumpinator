@@ -12,11 +12,12 @@ private final String ACCESS_SECRET = "admz1Hhusclk1zeW6hpW76oAMvyowlgIlaHcpGco62
 
 private final int STATUS_COUNT = 200;
 private final float LINE_HEIGHT = 1.2;
-private final int AUDIO_SCALE = 80000;
+private final int AUDIO_SCALE = 50000;
 
 private float posX;
 private float posY;
 private float sizeX;
+private float sizeY;
 
 private java.util.List<Status> timeline;
 private Twitter twitter;
@@ -92,10 +93,8 @@ void draw()
     if (pos >= timeline.size()) {
       pos = 0;
     }
-
-    /*backgroundCol();
-    displayStatuses();
-    explode();*/
+    
+    // Change pixels on mic input
     changePixels();
   }
 }
@@ -105,8 +104,6 @@ void keyTyped()
   if (key == ' ') {
     setNextStatus();
     searchAd();
-    // if
-    // bAd.theWord = (" ");
   }
 }
 
@@ -116,34 +113,23 @@ void changePixels()
   float volume = getAudioVolume();
 
   // Define pixel shift
-  int pixelCenter = (pixelWidth * pixelHeight / 2) - pixelWidth / 2;
-  int pixelBorder = int((pixelHeight > pixelWidth ? pixelWidth : pixelHeight) * .4);
-  int pixelShiftStep = volume > pixelBorder ? pixelBorder : int(volume); 
-
+  int pixelCenter = int(posY) * pixelWidth + pixelWidth / 2;
+  int pixelShift = volume > sizeX / 2 ? int(sizeX / 2) : int(volume);
+  
   // Set pixels to be moved
   loadPixels ();
   
-  for (int y = -pixelShiftStep, n=0; y <= pixelShiftStep; y++)
+  for (int y = 0; y <= int(sizeY); y++)
   {
     // Get center of current line
     int currentCenter = pixelCenter + y * pixelWidth;
-    
-    // Add pixels to be moved
-    for (int i=currentCenter - n; i <= currentCenter + n; i++)
-    {
-      int dir = 1;
-      if (i <= currentCenter) {
-        dir = -1;
-      }
-      
-      arrayCopy(pixels, i, pixels, i + dir, 1);
+
+    // Move pixels
+    for (int i=currentCenter - pixelShift; i <= currentCenter; i++) {
+      arrayCopy(pixels, i, pixels, i - 1, 1);
     }
-    
-    // Update pixel length
-    if (y < 0) {
-      n++;
-    } else {
-      n--;
+    for (int i=currentCenter + pixelShift; i > currentCenter; i--) {
+      arrayCopy(pixels, i, pixels, i + 1, 1);
     }
   }
 
@@ -249,6 +235,12 @@ void displayStatuses()
     for (int i=0; i < lines.size(); i++) {
       fill(0);
       text(lines.get(i), posX, posY + (LINE_HEIGHT * i * textSize));
+    }
+    
+    // Set y size
+    sizeY = (lines.size()+1) * textSize;
+    if (sizeY + posY > pixelHeight) {
+      sizeY = pixelHeight - posY;
     }
   }
 }
