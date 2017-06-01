@@ -12,7 +12,6 @@ aching
 acidic
 acrobatic
 active
-actual
 adept
 admirable
 admired
@@ -35,7 +34,6 @@ alarming
 alert
 alienated
 alive
-all
 altruistic
 amazing
 ambitious
@@ -49,7 +47,6 @@ angry
 anguished
 animated
 annual
-another
 antique
 anxious
 any
@@ -79,7 +76,6 @@ awful
 awkward
 babyish
 bad
-back
 baggy
 bare
 barren
@@ -228,8 +224,6 @@ dazzling
 dead
 deadly
 deafening
-dear
-dearest
 decent
 decimal
 decisive
@@ -262,7 +256,6 @@ diligent
 dim
 dimpled
 dimwitted
-direct
 disastrous
 discrete
 disfigured
@@ -293,7 +286,6 @@ dry
 dual
 dull
 dutiful
-each
 eager
 earnest
 early
@@ -329,7 +321,6 @@ essential
 esteemed
 ethical
 euphoric
-even
 evergreen
 everlasting
 every
@@ -611,7 +602,6 @@ jam-packed
 jaunty
 jealous
 jittery
-joint
 jolly
 jovial
 joyful
@@ -1173,7 +1163,6 @@ trusty
 truthful
 tubby
 turbulent
-twin
 ugly
 ultimate
 unacceptable
