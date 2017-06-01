@@ -12,7 +12,7 @@ private final String ACCESS_SECRET = "admz1Hhusclk1zeW6hpW76oAMvyowlgIlaHcpGco62
 
 private final int STATUS_COUNT = 200;
 private final float LINE_HEIGHT = 1.2;
-private final int AUDIO_SCALE = 50000;
+private final int AUDIO_SCALE = 80000;
 
 private float posX;
 private float posY;
@@ -33,8 +33,6 @@ private int randomCol;
 
 private Minim minim;
 private AudioInput input;
-
-bouncyWord bAd = new bouncyWord(word, width/4);
 
 void setup()
 {
@@ -95,15 +93,10 @@ void draw()
       pos = 0;
     }
 
-    //backgroundCol();
-    //displayStatuses();
-    //explode();
-    //changePixels();
-    //bAd.draw();
-    
-    if (frameCount % 60 == 0) {
-      changePixels();
-    }
+    /*backgroundCol();
+    displayStatuses();
+    explode();*/
+    changePixels();
   }
 }
 
@@ -128,8 +121,7 @@ void changePixels()
   int pixelShiftStep = volume > pixelBorder ? pixelBorder : int(volume); 
 
   // Set pixels to be moved
-  ArrayList<Integer> moveRight = new ArrayList<Integer>();
-  ArrayList<Integer> moveLeft = new ArrayList<Integer>();
+  loadPixels ();
   
   for (int y = -pixelShiftStep, n=0; y <= pixelShiftStep; y++)
   {
@@ -137,12 +129,14 @@ void changePixels()
     int currentCenter = pixelCenter + y * pixelWidth;
     
     // Add pixels to be moved
-    for (int i=currentCenter - n; i <= currentCenter + n; i++) {
+    for (int i=currentCenter - n; i <= currentCenter + n; i++)
+    {
+      int dir = 1;
       if (i <= currentCenter) {
-        moveLeft.add(i);
-      } else {
-        moveRight.add(i);
+        dir = -1;
       }
+      
+      arrayCopy(pixels, i, pixels, i + dir, 1);
     }
     
     // Update pixel length
@@ -153,12 +147,6 @@ void changePixels()
     }
   }
 
-  // Move pixels
-  loadPixels ();
-  for(int pixel : moveRight)
-  {
-    arrayCopy(pixels, pixel, pixels, pixel + 1, 1);
-  }
   updatePixels();
 }
 
@@ -333,11 +321,7 @@ void searchAd() {
       flotus = true;
       wr = random(width);
       hr = random(height);
-      bAd = new bouncyWord(word, width/4);
       adFound();
-      break;
-    } else {
-      bAd = new bouncyWord("", 0);
     }
   }
 }
@@ -420,35 +404,5 @@ void adFound() {
     if (plist.size() > 5*MAX) {
       plist.remove(0);
     }
-  }
-}
-
-public String getWord()
-{
-  return word;
-}
-
-class bouncyWord {
-  String theWord; 
-  float px, py, vx, vy;
-  bouncyWord(String word, float ipx) {
-    theWord = word;
-    px=ipx;
-    vx=0;
-    py=height/2;
-    vy=random(2, 7);
-  }
-  void draw() {
-    px+=vx;
-    py+=vy;
-    if (py<0) {
-      py=0;
-      vy=-vy;
-    }
-    if (py>height) {
-      py=height;
-      vy=-vy;
-    }
-    text(theWord, px, py);
   }
 }
