@@ -14,7 +14,7 @@ private final String ACCESS_SECRET = "1zxvsNQm6SBNfkSJFYyBE3qtFOmTXlUoizbhOKcLB4
 
 private final int STATUS_COUNT = 200;
 private final float LINE_HEIGHT = 1.2;
-private final int[] AUDIO_SCALINGS = new int[] { 20000, 45000, 70000 };
+private final int[] AUDIO_SCALINGS = new int[] { 2000, 8000, 14000 };
 
 private float posX;
 private float posY;
@@ -43,7 +43,6 @@ void setup()
   // Window settings
   // fullScreen();
   size(1080, 720);
-  background(237);
 
   // Set status position
   pos = -1;
@@ -92,13 +91,14 @@ void showInstructions()
   PFont font = getFont("Obelix");
   textFont(font);
   textAlign(CENTER, TOP);
-  fill(0);
+  fill(255);
+  background(0);
   
   // Set text
   String headline = "Trumpinator";
   String description = "Hey, kennen Sie Donald Trump?\nSind Sie genau so fasziniert von ihm wie wir?\n" +
                        "Dann ran an's Mikrofon! Schreien Sie sich die Seele aus dem Leib!\n" +
-                       "Beseitigen Sie die total idiotischen Tweets von diesem Wahnsinnigen!\nHave fun ;)";
+                       "Zerstören Sie die total idiotischen Tweets von diesem Verrückten!\nHave fun ;)";
   String[][] keys = new String[][] {
     new String[] {"Space", "Nächster Tweet"},
     new String[] {"1-3", "Empfindlichkeit des Mikrofons ändern"}
@@ -122,7 +122,6 @@ void showInstructions()
   font = getFont("Sketchit");
   textFont(font);
   textSize(25);
-  fill(0);
   text(description + "\n\n" + shortcuts, posX, posY + 170, sizeX, 500);
 }
 
