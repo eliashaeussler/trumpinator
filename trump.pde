@@ -407,7 +407,7 @@ void explode() {
 }
 
 /*
-* 
+* method 
 */
 void adFound() {
   for (int i = 0; i < MAX; i ++) {
