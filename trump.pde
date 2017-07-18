@@ -359,13 +359,17 @@ float getAudioVolume()
 
 
 /*
+* THESE METHODS AREN'T USED CURRENTLY!
+*
 * Methods for an explosion if an adjctive was found.
-* These methods aren't used currently. 
+* Searching for adjectives. Comparing the words from the current tweet with an 
+* selfmade list full of adjectives. If one is found a new ArrayList with particles 
+* will be created. The explosion will be located radnom on the frame.
 */
 
 
 
-private boolean flotus;
+private boolean explo;
 private float wr, hr;
 
 /*
@@ -384,7 +388,7 @@ void searchAd() {
 
     if (adjectives.contains(word)) {
       println("I've got it! - " + word);
-      flotus = true;
+      explo = true;
       wr = random(width);
       hr = random(height);
       adFound();
@@ -393,8 +397,7 @@ void searchAd() {
 }
 
 /*
-* expolsion if adjective was found
-* new class for new generated particles
+* new class for new generated particles for the explosion
 */
 ArrayList plist = new ArrayList();
 int MAX = 50;
@@ -457,7 +460,7 @@ class Particle {
 * method for the expolison
 */
 void explode() {
-  if (flotus /*&& test == true*/) {
+  if (explo) {
     for (int i = 0; i < plist.size(); i++) {
       Particle p = (Particle) plist.get(i); 
       //makes p a particle equivalent to ith particle in ArrayList
@@ -469,7 +472,7 @@ void explode() {
 }
 
 /*
-* method 
+* method for a new ArrayList with particles if adjective was found
 */
 void adFound() {
   for (int i = 0; i < MAX; i ++) {
