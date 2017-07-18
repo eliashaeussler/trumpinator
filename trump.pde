@@ -101,6 +101,10 @@ void draw()
 
 void keyTyped()
 {
+  // blablabl
+  if (true) {
+    
+  }
   if (key == ' ') {
     setNextStatus();
     searchAd();
