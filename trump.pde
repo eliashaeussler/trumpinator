@@ -7,8 +7,8 @@ import ddf.minim.*;
 
 private final String CONSUMER_KEY = "5si5P0GEefFMLjuH0JCz3e2Wu";
 private final String CONSUMER_SECRET = "Gpyn8W4aZBfEuZ9uIqvmbljZalgXLEDiXczvJabEsCWyMXEG8M";
-private final String ACCESS_TOKEN = "2273657383-RGW1GvXHedkK6cRzpg424t3K6wK8n1hfy8HB8A7";
-private final String ACCESS_SECRET = "admz1Hhusclk1zeW6hpW76oAMvyowlgIlaHcpGco62Pfl";
+private final String ACCESS_TOKEN = "2273657383-ZOLTTbpsTUcU01g87EBWsn04TahGPckexKXR52Z";
+private final String ACCESS_SECRET = "1zxvsNQm6SBNfkSJFYyBE3qtFOmTXlUoizbhOKcLB4t7H";
 
 private final int STATUS_COUNT = 200;
 private final float LINE_HEIGHT = 1.2;
@@ -23,7 +23,7 @@ private java.util.List<Status> timeline;
 private Twitter twitter;
 private Status status;
 
-private java.util.List<PFont> fonts;
+private ArrayList<PFont> fonts;
 
 private ArrayList<String> lines;
 private int textSize;
@@ -38,7 +38,7 @@ private AudioInput input;
 void setup()
 {
   // Window settings
-  size(1440, 900);
+  size(1080, 720);
   background(255);
 
   // Set status position
@@ -69,6 +69,9 @@ void setup()
   try {
 
     // Get statuses
+    // Query query = new Query("#trump");
+    // QueryResult res = twitter.search(query);
+    // hashtags = res.getTweets();
     timeline = twitter.getUserTimeline("realDonaldTrump", new Paging(1, STATUS_COUNT));
 
     // Get fonts
@@ -100,6 +103,7 @@ void keyTyped()
 {
   if (key == ' ') {
     setNextStatus();
+    searchAd();
   }
 }
 
@@ -214,6 +218,9 @@ void setNextStatus()
 
     // Get random value for color
     randomCol = (int) random(255);
+
+    // Search for adjectives
+    searchAd();
   }
 
   backgroundCol();
@@ -282,4 +289,112 @@ float getAudioVolume()
   if ((int) average == 0) average++;
 
   return average;
+}
+
+
+
+private boolean flotus;
+private float wr, hr;
+
+//search for adjectives
+void searchAd() {
+  String[] list = split(text, ' ');
+  ArrayList<String> words = new ArrayList<String>(Arrays.asList(list));
+  String adList[] = loadStrings("ad_list.txt");
+  //ArrayList<String> ads = new ArrayList<String>(Arrays.asList(adList));
+  HashSet<String> adjectives = new HashSet<String>();
+
+  for (String bw : adList) adjectives.add(bw);
+
+  for (String word : words) {
+
+    if (adjectives.contains(word)) {
+      println("I've got it! - " + word);
+      flotus = true;
+      wr = random(width);
+      hr = random(height);
+      adFound();
+    }
+  }
+}
+
+//expolsion if adjective was found
+ArrayList plist = new ArrayList();
+int MAX = 50;
+
+class Particle {
+  float r = 2;
+  PVector pos, speed, grav; 
+  ArrayList tail;
+  float splash = 5;
+  int margin = 2;
+  int taillength = 25;
+
+  Particle(float tempx, float tempy) {
+    float startx = tempx + random(-splash, splash);
+    float starty = tempy + random(-splash, splash);
+    startx = constrain(startx, 0, width);
+    starty = constrain(starty, 0, height);
+    float xspeed = random(-3, 3);
+    float yspeed = random(-3, 3);
+
+    pos = new PVector(startx, starty);
+    speed = new PVector(xspeed, yspeed);
+    grav = new PVector(0, 0.02);
+
+    tail = new ArrayList();
+  }
+
+  void run() {
+    pos.add(speed);
+
+    tail.add(new PVector(pos.x, pos.y, 0));
+    if (tail.size() > taillength) {
+      tail.remove(0);
+    }
+
+    float damping = random(-0.5, -0.6);
+    if (pos.x > width - margin || pos.x < margin) {
+      speed.x *= damping;
+    }
+    if (pos.y > height -margin) {
+      speed.y *= damping;
+    }
+  }
+
+  void gravity() {
+    speed.add(grav);
+  }
+
+  void update() {
+    for (int i = 0; i < tail.size(); i++) {
+      PVector tempv = (PVector)tail.get(i);
+      noStroke();
+      fill(6*i + 50);
+      ellipse(tempv.x, tempv.y, r, r);
+    }
+  }
+}
+
+void explode() {
+  if (flotus /*&& test == true*/) {
+    for (int i = 0; i < plist.size(); i++) {
+      Particle p = (Particle) plist.get(i); 
+      //makes p a particle equivalent to ith particle in ArrayList
+      p.run();
+      p.update();
+      p.gravity();
+    }
+  }
+}
+
+void adFound() {
+  // test = true;
+  for (int i = 0; i < MAX; i ++) {
+    plist.add(new Particle(wr, hr)); // fill ArrayList with particles
+
+    if (plist.size() > 5*MAX) {
+      plist.remove(0);
+    }
+  }
 }
