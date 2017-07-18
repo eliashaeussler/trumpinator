@@ -293,10 +293,22 @@ float getAudioVolume()
 
 
 
+
+
+
+/*
+* Methods for an explosion if an adjctive was found.
+* These methods aren't used currently. 
+*/
+
+
+
 private boolean flotus;
 private float wr, hr;
 
-//search for adjectives
+/*
+* Search for adjectives in the tweet
+*/
 void searchAd() {
   String[] list = split(text, ' ');
   ArrayList<String> words = new ArrayList<String>(Arrays.asList(list));
@@ -318,7 +330,10 @@ void searchAd() {
   }
 }
 
-//expolsion if adjective was found
+/*
+* expolsion if adjective was found
+* new class for new generated particles
+*/
 ArrayList plist = new ArrayList();
 int MAX = 50;
 
@@ -376,6 +391,9 @@ class Particle {
   }
 }
 
+/*
+* method for the expolison
+*/
 void explode() {
   if (flotus /*&& test == true*/) {
     for (int i = 0; i < plist.size(); i++) {
@@ -388,8 +406,10 @@ void explode() {
   }
 }
 
+/*
+* 
+*/
 void adFound() {
-  // test = true;
   for (int i = 0; i < MAX; i ++) {
     plist.add(new Particle(wr, hr)); // fill ArrayList with particles
 
