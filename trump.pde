@@ -5,6 +5,8 @@ import java.io.*;
 import java.net.*;
 import ddf.minim.*;
 
+private final String VERSION = "1.0";
+
 private final String CONSUMER_KEY = "5si5P0GEefFMLjuH0JCz3e2Wu";
 private final String CONSUMER_SECRET = "Gpyn8W4aZBfEuZ9uIqvmbljZalgXLEDiXczvJabEsCWyMXEG8M";
 private final String ACCESS_TOKEN = "2273657383-ZOLTTbpsTUcU01g87EBWsn04TahGPckexKXR52Z";
@@ -12,7 +14,7 @@ private final String ACCESS_SECRET = "1zxvsNQm6SBNfkSJFYyBE3qtFOmTXlUoizbhOKcLB4
 
 private final int STATUS_COUNT = 200;
 private final float LINE_HEIGHT = 1.2;
-private final int AUDIO_SCALE = 50000;
+private final int[] AUDIO_SCALINGS = new int[] { 20000, 45000, 70000 };
 
 private float posX;
 private float posY;
@@ -34,23 +36,22 @@ private int randomCol;
 
 private Minim minim;
 private AudioInput input;
+private int currentScale = 1;
 
 void setup()
 {
   // Window settings
+  // fullScreen();
   size(1080, 720);
-  background(255);
+  background(237);
 
   // Set status position
-  pos = 0;
+  pos = -1;
 
   // Set sizes
   posX = width * .125;
   posY = height * .125;
   sizeX = width * .75;
-
-  // Text settings
-  textAlign(LEFT, TOP);
 
   // Audio settings
   minim = new Minim(this);
@@ -76,22 +77,62 @@ void setup()
 
     // Get fonts
     getFonts();
-
-    // Display statuses
-    setNextStatus();
+    
+    // Display user instructions
+    showInstructions();
   } 
   catch (TwitterException e) {
     println("Connection to Twitter failed.");
   }
 }
 
+void showInstructions()
+{
+  // Text settings
+  PFont font = getFont("Obelix");
+  textFont(font);
+  textAlign(CENTER, TOP);
+  fill(0);
+  
+  // Set text
+  String headline = "Trumpinator";
+  String description = "Hey, kennen Sie Donald Trump?\nSind Sie genau so fasziniert von ihm wie wir?\n" +
+                       "Dann ran an's Mikrofon! Schreien Sie sich die Seele aus dem Leib!\n" +
+                       "Beseitigen Sie die total idiotischen Tweets von diesem Wahnsinnigen!\nHave fun ;)";
+  String[][] keys = new String[][] {
+    new String[] {"Space", "Nächster Tweet"},
+    new String[] {"1-3", "Empfindlichkeit des Mikrofons ändern"}
+  };
+  
+  // Set shortcuts
+  String shortcuts = "";
+  for (String[] shortcut : keys) {
+    shortcuts += "\n" + shortcut[0] + ": " + shortcut[1];
+  }
+  
+  // Show headline
+  textSize(50);
+  text(headline, width/2, posY);
+  
+  // Show version
+  textSize(14);
+  text(VERSION, width/2, posY + 100);
+  
+  // Show description and shortcuts
+  font = getFont("Sketchit");
+  textFont(font);
+  textSize(25);
+  fill(0);
+  text(description + "\n\n" + shortcuts, posX, posY + 170, sizeX, 500);
+}
+
 void draw()
 {
-  if (timeline != null)
+  if (pos >= 0 && timeline != null)
   {
     // Reset position
     if (pos >= timeline.size()) {
-      pos = 0;
+      pos = -1;
     }
     
     // Change pixels on mic input
@@ -101,13 +142,19 @@ void draw()
 
 void keyTyped()
 {
-  // blablabl
-  if (true) {
+  switch (key)
+  {
+    // Show next status
+    case ' ':
+      setNextStatus();
+      break;
     
-  }
-  if (key == ' ') {
-    setNextStatus();
-    searchAd();
+    // Set audio scale
+    case '1':
+    case '2':
+    case '3':
+      currentScale = int(key+"")-1;
+      break;
   }
 }
 
@@ -162,12 +209,25 @@ void getFonts()
   }
 }
 
+PFont getFont(String fontName)
+{
+  if (fonts != null) {
+    for (PFont font : fonts) {
+      if (font.getName().toLowerCase().indexOf(fontName.toLowerCase()) == 0) {
+        return font;
+      }
+    }
+  }
+  
+  return createFont("Arial", 14, true);
+}
+
 void setNextStatus()
 {
   if (timeline != null)
   {
     // Get status
-    status = (Status) timeline.get(pos++);
+    status = (Status) timeline.get(++pos);
 
     // Get text
     text = status.getText();
@@ -192,6 +252,7 @@ void setNextStatus()
       font = createFont("Arial", 14, true);
     }
     textFont(font);
+    textAlign(LEFT, TOP);
 
     // Set text size
     textSize = 120 - text.length() / 2;
@@ -222,9 +283,6 @@ void setNextStatus()
 
     // Get random value for color
     randomCol = (int) random(255);
-
-    // Search for adjectives
-    searchAd();
   }
 
   backgroundCol();
@@ -288,7 +346,7 @@ float getAudioVolume()
   float sum = 0;
   for (int i=0; i < input.bufferSize(); i++) sum += input.mix.get(i);
 
-  float average = (sum * AUDIO_SCALE) / input.bufferSize();
+  float average = (sum * AUDIO_SCALINGS[currentScale]) / input.bufferSize();
   if (average < 0) average *= -1;
   if ((int) average == 0) average++;
 
