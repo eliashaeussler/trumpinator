@@ -26,13 +26,12 @@ private Twitter twitter;
 private Status status;
 
 private ArrayList<PFont> fonts;
-
-private ArrayList<String> lines;
 private int textSize;
 private String text;
 public String word;
 private int pos;
 private int randomCol;
+private boolean inMenu;
 
 private Minim minim;
 private AudioInput input;
@@ -41,17 +40,17 @@ private int currentScale = 1;
 void setup()
 {
   // Window settings
-  // fullScreen();
-  size(1080, 720);
-
-  // Set status position
-  pos = -1;
+  fullScreen();
 
   // Set sizes
   posX = width * .125;
   posY = height * .125;
   sizeX = width * .75;
+  sizeY = height * .75;
 
+  // Set status position
+  pos = -1;
+  
   // Audio settings
   minim = new Minim(this);
   input = minim.getLineIn(Minim.STEREO, 512);
@@ -87,6 +86,8 @@ void setup()
 
 void showInstructions()
 {
+  inMenu = true;
+  
   // Text settings
   PFont font = getFont("Obelix");
   textFont(font);
@@ -101,7 +102,9 @@ void showInstructions()
                        "Zerstören Sie die total idiotischen Tweets von diesem Verrückten!\nHave fun ;)";
   String[][] keys = new String[][] {
     new String[] {"Space", "Nächster Tweet"},
-    new String[] {"1-3", "Empfindlichkeit des Mikrofons ändern"}
+    new String[] {"1-3", "Empfindlichkeit des Mikrofons ändern"},
+    new String[] {"M", "Zurück zum Menü"},
+    new String[] {"Esc", "Beenden"}
   };
   
   // Set shortcuts
@@ -122,15 +125,15 @@ void showInstructions()
   font = getFont("Sketchit");
   textFont(font);
   textSize(25);
-  text(description + "\n\n" + shortcuts, posX, posY + 170, sizeX, 500);
+  text(description + "\n\n" + shortcuts, posX, posY + 170, sizeX, sizeY);
 }
 
 void draw()
 {
-  if (pos >= 0 && timeline != null)
+  if (!inMenu && timeline != null)
   {
     // Reset position
-    if (pos >= timeline.size()) {
+    if (pos >= timeline.size()-1) {
       pos = -1;
     }
     
@@ -145,6 +148,7 @@ void keyTyped()
   {
     // Show next status
     case ' ':
+      inMenu = false;
       setNextStatus();
       break;
     
@@ -154,6 +158,13 @@ void keyTyped()
     case '3':
       currentScale = int(key+"")-1;
       break;
+    
+    case 'm':
+      showInstructions();
+      break;
+    
+    case ESC:
+      exit();
   }
 }
 
@@ -256,29 +267,7 @@ void setNextStatus()
     // Set text size
     textSize = 120 - text.length() / 2;
     textSize(textSize);
-
-    // Get text lines
-    lines = new ArrayList<String> ();
-    int enterPos = 0;
-    for (int i=0; i < text.length(); i++)
-    {
-      String s = "";
-      for (int n=enterPos; n < i; n++)
-      {
-        if (n == enterPos && text.charAt(n) == ' ') {
-          n++;
-        } else {
-          s += text.charAt(n);
-        }
-      }
-
-      if (textWidth(s) > sizeX) {
-        lines.add(s.substring(0, s.length()-1));
-        enterPos = --i;
-      } else if (i == text.length()-1) {
-        lines.add(s.substring(0, s.length()));
-      }
-    }
+    textLeading(textSize * LINE_HEIGHT);
 
     // Get random value for color
     randomCol = (int) random(255);
@@ -290,19 +279,9 @@ void setNextStatus()
 
 void displayStatuses()
 {
-  if (timeline != null)
-  {
-    // Write text
-    for (int i=0; i < lines.size(); i++) {
-      fill(0);
-      text(lines.get(i), posX, posY + (LINE_HEIGHT * i * textSize));
-    }
-    
-    // Set y size
-    sizeY = (lines.size()+1) * textSize;
-    if (sizeY + posY > pixelHeight) {
-      sizeY = pixelHeight - posY;
-    }
+  if (timeline != null) {
+    fill(0);
+    text(text, posX, posY, sizeX, height);
   }
 }
 
