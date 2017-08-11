@@ -1,3 +1,26 @@
+/**
+ * ===========
+ * TRUMPINATOR
+ * ===========
+ * 
+ * TO USE THIS PROGRAM PROPERLY, YOU NEED TO INSERT A MICROPHONE TO YOUR COMPUTER.
+ * 
+ * YOU CAN SIMPLY ADD YOUR OWN FONTS BY PLACING THEM INSIDE THE "data" FOLDER.
+ * CUSTOM FONTS NEED TO BE .ttf OR .otf FORMATTED, OTHERWISE THE PROGRAM WON'T READ THEM.
+ * FONTS WILL BE PICKED RANDOMLY WHEN DISPLAYING ANOTHER STATUS.
+ * 
+ * ========
+ * CONTROLS
+ * ========
+ * 
+ * Space : Show next tweet
+ *   1-3 : Set audio input sensitivity (1=low, 2=medium, 3=high)
+ *     M : Show menu
+ *   Esc : Quit program
+ */
+ 
+ 
+
 import twitter4j.*;
 import java.awt.*;
 import java.util.*;
@@ -5,34 +28,51 @@ import java.io.*;
 import java.net.*;
 import ddf.minim.*;
 
+// Software version
 private final String VERSION = "1.0";
 
+// Twitter API settings (DO NOT CHANGE UNLESS TWITTER CONNECTION IS NOT WORKING)
 private final String CONSUMER_KEY = "5si5P0GEefFMLjuH0JCz3e2Wu";
 private final String CONSUMER_SECRET = "Gpyn8W4aZBfEuZ9uIqvmbljZalgXLEDiXczvJabEsCWyMXEG8M";
 private final String ACCESS_TOKEN = "2273657383-ZOLTTbpsTUcU01g87EBWsn04TahGPckexKXR52Z";
 private final String ACCESS_SECRET = "1zxvsNQm6SBNfkSJFYyBE3qtFOmTXlUoizbhOKcLB4t7H";
 
+// Number of latest statuses to be displayed
 private final int STATUS_COUNT = 200;
+
+// Line height of displayed text
 private final float LINE_HEIGHT = 1.2;
+
+// Scalings for audio input (used to increase audio input spectrum data)
 private final int[] AUDIO_SCALINGS = new int[] { 2000, 8000, 14000 };
 
+// Boundaries and maximum sizes of displayable text
 private float posX;
 private float posY;
 private float sizeX;
 private float sizeY;
 
+// Twitter data
 private java.util.List<Status> timeline;
 private Twitter twitter;
 private Status status;
 
+// All fonts placed in "data" folder
 private ArrayList<PFont> fonts;
-private int textSize;
+
+// Current status text from twitter
 private String text;
-public String word;
+
+// Current position in List "timeline"
 private int pos;
+
+// Current random background color value (0-255)
 private int randomCol;
+
+// Gets state of menu being opened or not
 private boolean inMenu;
 
+// Audio input data
 private Minim minim;
 private AudioInput input;
 private int currentScale = 1;
@@ -42,16 +82,16 @@ void setup()
   // Window settings
   fullScreen();
 
-  // Set sizes
+  // Set text boundaries and maximum sizes
   posX = width * .125;
   posY = height * .125;
   sizeX = width * .75;
   sizeY = height * .75;
 
-  // Set status position
+  // Set status position (-1 means that the menu will be shown at first, so the pointer is in front of the first status)
   pos = -1;
   
-  // Audio settings
+  // Get audio input
   minim = new Minim(this);
   input = minim.getLineIn(Minim.STEREO, 512);
 
@@ -66,24 +106,23 @@ void setup()
   twitter = new TwitterFactory(cb.build()).getInstance();
 
   try {
-
     // Get statuses
-    // Query query = new Query("#trump");
-    // QueryResult res = twitter.search(query);
-    // hashtags = res.getTweets();
     timeline = twitter.getUserTimeline("realDonaldTrump", new Paging(1, STATUS_COUNT));
 
-    // Get fonts
+    // Get all custom fonts from "data" folder
     getFonts();
     
     // Display user instructions
     showInstructions();
   } 
   catch (TwitterException e) {
-    println("Connection to Twitter failed.");
+    error("Verbindung zu Twitter fehlgeschlagen.");
   }
 }
 
+/**
+ * Show menu which contains welcome screen and user instructions.
+ */
 void showInstructions()
 {
   inMenu = true;
@@ -95,7 +134,7 @@ void showInstructions()
   fill(255);
   background(0);
   
-  // Set text
+  // Set texts
   String headline = "Trumpinator";
   String description = "Hey, kennen Sie Donald Trump?\nSind Sie genau so fasziniert von ihm wie wir?\n" +
                        "Dann ran an's Mikrofon! Schreien Sie sich die Seele aus dem Leib!\n" +
@@ -128,11 +167,14 @@ void showInstructions()
   text(description + "\n\n" + shortcuts, posX, posY + 170, sizeX, sizeY);
 }
 
+/**
+ * On each frame reset position if last status has been reached and change pixels on audio input.
+ */
 void draw()
 {
   if (!inMenu && timeline != null)
   {
-    // Reset position
+    // Reset pointer
     if (pos >= timeline.size()-1) {
       pos = -1;
     }
@@ -142,32 +184,48 @@ void draw()
   }
 }
 
+/**
+ * Do operation when user has typed any key.
+ */
 void keyTyped()
 {
-  switch (key)
+  if (timeline != null)
   {
-    // Show next status
-    case ' ':
-      inMenu = false;
-      setNextStatus();
-      break;
-    
-    // Set audio scale
-    case '1':
-    case '2':
-    case '3':
-      currentScale = int(key+"")-1;
-      break;
-    
-    case 'm':
-      showInstructions();
-      break;
-    
-    case ESC:
-      exit();
+    switch (key)
+    {
+      // Show next status
+      case ' ':
+        inMenu = false;
+        setNextStatus();
+        break;
+      
+      // Set audio scale
+      case '1':
+      case '2':
+      case '3':
+        currentScale = int(key+"")-1;
+        break;
+      
+      // Show menu
+      case 'm':
+        showInstructions();
+        break;
+      
+      // Quit program
+      case ESC:
+        exit();
+    }
+  }
+  else
+  {
+    // Show error message if connection to twitter is not established
+    error("Verbindung zu Twitter fehlgeschlagen.");
   }
 }
 
+/**
+ * Move pixels on audio input to destroy displayed status text.
+ */
 void changePixels()
 {
   // Get input audio volume
@@ -177,10 +235,11 @@ void changePixels()
   int pixelCenter = int(posY) * pixelWidth + pixelWidth / 2;
   int pixelShift = volume > sizeX / 2 ? int(sizeX / 2) : int(volume);
   
-  // Set pixels to be moved
-  loadPixels ();
+  // Get pixels to be moved
+  loadPixels();
   
-  for (int y = 0; y <= int(sizeY); y++)
+  // Move each pixel
+  for (int y=0; y <= int(sizeY); y++)
   {
     // Get center of current line
     int currentCenter = pixelCenter + y * pixelWidth;
@@ -194,9 +253,13 @@ void changePixels()
     }
   }
 
+  // Set updated pixels
   updatePixels();
 }
 
+/**
+ * Load all fonts into "fonts" list which are placed inside the "data" folder.
+ */
 void getFonts()
 {
   // Initialize fonts list
@@ -219,8 +282,12 @@ void getFonts()
   }
 }
 
+/**
+ * Get custom font from "data" folder set by "fontName".
+ */
 PFont getFont(String fontName)
 {
+  // Try to get font
   if (fonts != null) {
     for (PFont font : fonts) {
       if (font.getName().toLowerCase().indexOf(fontName.toLowerCase()) == 0) {
@@ -229,9 +296,16 @@ PFont getFont(String fontName)
     }
   }
   
+  // If font was not founded, return default font (Arial)
   return createFont("Arial", 14, true);
 }
 
+/**
+ * Move pointer to next status and set interface output.
+ * This gets the text of the next status in the "status" list. After that, some interface modifications
+ * such as removing line breaks and urls and setting font, text and background color will be processed.
+ * In the end, the new text is going to be displayed in the interface.
+ */
 void setNextStatus()
 {
   if (timeline != null)
@@ -239,21 +313,17 @@ void setNextStatus()
     // Get status
     status = (Status) timeline.get(++pos);
 
-    // Get text
+    // Get status text
     text = status.getText();
 
     // Convert line breaks to whitespaces
     text = text.replaceAll("\n", " ");
 
     // Remove URLs
-    for (URLEntity url : status.getURLEntities()) {
-      text = text.replace(url.getURL(), "");
-    }
-    for (MediaEntity media : status.getMediaEntities()) {
-      text = text.replace(media.getURL(), "");
-    }
+    for (URLEntity url : status.getURLEntities()) text = text.replace(url.getURL(), "");
+    for (MediaEntity media : status.getMediaEntities()) text = text.replace(media.getURL(), "");
 
-    // Set font
+    // Set font (tries to get any random custom font, otherwise the default font (Arial) is being used)
     PFont font;
     if (fonts != null && fonts.size() > 0) {
       int index = (int) random(fonts.size());
@@ -261,11 +331,13 @@ void setNextStatus()
     } else {
       font = createFont("Arial", 14, true);
     }
+    
+    // Apply font and set text align
     textFont(font);
     textAlign(LEFT, TOP);
 
     // Set text size
-    textSize = 120 - text.length() / 2;
+    int textSize = 120 - text.length() / 2;
     textSize(textSize);
     textLeading(textSize * LINE_HEIGHT);
 
@@ -273,11 +345,17 @@ void setNextStatus()
     randomCol = (int) random(255);
   }
 
+  // Set background color of current status
   backgroundCol();
-  displayStatuses();
+  
+  // Display current status
+  displayStatus();
 }
 
-void displayStatuses()
+/**
+ * Display current status.
+ */
+void displayStatus()
 {
   if (timeline != null) {
     fill(0);
@@ -285,45 +363,59 @@ void displayStatuses()
   }
 }
 
+/**
+ * Set background color for current status.
+ */
 void backgroundCol()
 {
-  // Set calendar time
-  Calendar cal = Calendar.getInstance();
-  cal.setTime(status.getCreatedAt());
-
-  // Get day and hour of status
-  int hour = cal.get(Calendar.HOUR);
-
-  // Set colors
-  int red = 0, blue = 0, green = 0;
-
-  if (hour <= 6) {
-    red = 255;
-    blue = randomCol;
-    green = 0;
-  } else if (hour <= 12) {
-    red = 0;
-    blue = 255;
-    green = randomCol;
-  } else if (hour <= 18) {
-    red = 0;
-    blue = randomCol;
-    green = 255;
-  } else if (hour <= 24) {
-    red = randomCol;
-    blue = 0;
-    green = 255;
+  if (status != null)
+  {
+    // Get time instance and set time to creation time of current status
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(status.getCreatedAt());
+  
+    // Get hour of current status
+    int hour = cal.get(Calendar.HOUR);
+  
+    // Reset rgb colors
+    int red = 0,
+        blue = 0,
+        green = 0;
+  
+    // Set colors depending on the creation time of the current status
+    if (hour <= 6) {
+      red = 255;
+      blue = randomCol;
+      green = 0;
+    } else if (hour <= 12) {
+      red = 0;
+      blue = 255;
+      green = randomCol;
+    } else if (hour <= 18) {
+      red = 0;
+      blue = randomCol;
+      green = 255;
+    } else if (hour <= 24) {
+      red = randomCol;
+      blue = 0;
+      green = 255;
+    }
+  
+    // Apply color to background
+    background(red, blue, green);
   }
-
-  // Set background
-  background(red, blue, green);
 }
 
+/**
+ * Read volume of audio input (this is normally the user mic).
+ */
 float getAudioVolume()
 {
+  // Add multiple spectrum data
   float sum = 0;
   for (int i=0; i < input.bufferSize(); i++) sum += input.mix.get(i);
 
+  // Set used audio volume depending on the selected audio scaling
   float average = (sum * AUDIO_SCALINGS[currentScale]) / input.bufferSize();
   if (average < 0) average *= -1;
   if ((int) average == 0) average++;
@@ -331,21 +423,49 @@ float getAudioVolume()
   return average;
 }
 
+/**
+ * Show error message on screen.
+ */
+void error(String text)
+{
+  if (text.trim().length() > 0)
+  {
+    // Prevent program to recognize mic input
+    inMenu = true;
+    
+    // Load fonts
+    getFonts();
+    
+    // Set background
+    background(0);
+    
+    // Set text
+    fill(255);
+    textAlign(CENTER, CENTER);
+    textFont(getFont("Sketchit"));
+    textSize(25);
+    text(text.trim(), width/2, height/2);
+  }
+}
+
+
+
+
+
+
 
 
 
 
 
 /*
-* THESE METHODS AREN'T USED CURRENTLY!
+* THE ABOVE METHODS AREN'T USED CURRENTLY!
 *
 * Methods for an explosion if an adjctive was found.
 * Searching for adjectives. Comparing the words from the current tweet with an 
 * selfmade list full of adjectives. If one is found a new ArrayList with particles 
-* will be created. The explosion will be located radnom on the frame.
+* will be created. The explosion will be located random on the frame.
 */
-
-
 
 private boolean explo;
 private float wr, hr;
