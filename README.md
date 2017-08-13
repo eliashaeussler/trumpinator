@@ -22,6 +22,7 @@ If you want to open the project directly with Processing, you need to
 ## Resources we have used
 * Twitter4J (https://github.com/yusuke/twitter4j)
 * Minim (https://github.com/ddf/Minim/)
+* Some fonts downloaded from http://www.dafont.com/
 
 ## License
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
