@@ -17,6 +17,7 @@ If you want to open the project directly with Processing, you need to
 1. Clone or download the project from GitHub
 2. Open Processing
 3. Open the file *trumpinator.pde*. **Important: All files and folders need to be inside a folder called *trumpinator* (which they are, by default, when you clone the repository)**
+4. Press *Run* (or Cmd+R / Ctrl+R)
 
 ## Resources we have used
 * Twitter4J (https://github.com/yusuke/twitter4j)
