@@ -4,6 +4,20 @@ Welcome to Trumpinator, the world's best opportunity to deal with Donald Trump's
 ## What the hell is that?
 *Trumpinator* is our new method to help you get rid of your bad mood in relation to Donald Trump. We all know that he's a unsuitable president and we want him to know our frustration about him. So we decided to develop a tiny program which reads the lastest 200 tweets of @realdonaldtrump and enables you to destroy all of them by screaming inside your computer's mic. You will see, it's freeing! :-)
 
+## How to start
+There are both a built macOS application and the open-source Processing code available.
+
+### macOS application
+To start the application, you need to
+1. Clone or download the project from GitHub
+2. Open the file *application/trumpinator.app*
+
+### Processing project
+If you want to open the project directly with Processing, you need to
+1. Clone or download the project from GitHub
+2. Open Processing
+3. Open the file *trumpinator.pde*. **Important: All files and folders need to be inside a folder called *trumpinator* (which they are, by default, when you clone the repository)**
+
 ## Resources we have used
 * Twitter4J (https://github.com/yusuke/twitter4j)
 * Minim (https://github.com/ddf/Minim/)
