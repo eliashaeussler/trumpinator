@@ -5,17 +5,17 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>English</string>
     <key>CFBundleExecutable</key>
-    <string>trump</string>
+    <string>trumpinator</string>
     <key>CFBundleIconFile</key>
     <string>sketch.icns</string>
     <key>CFBundleIdentifier</key>
-    <string>trump</string>
+    <string>trumpinator</string>
     <key>CFBundleDisplayName</key>
-    <string>trump</string>
+    <string>trumpinator</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>trump</string>
+    <string>trumpinator</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
 
@@ -36,7 +36,7 @@
     <string>jdk1.8.0_131.jdk</string>
 
     <key>JVMMainClassName</key>
-    <string>trump</string>
+    <string>trumpinator</string>
 
     <key>LSMinimumSystemVersion</key>
     <string>10.8.5</string>
@@ -68,7 +68,7 @@
       <string>-Dapple.laf.useScreenMenuBar=true</string>
       <string>-Dcom.apple.macos.use-file-dialog-packages=true</string>
       <string>-Dcom.apple.macos.useScreenMenuBar=true</string>
-      <string>-Dcom.apple.mrj.application.apple.menu.about.name=trump</string>
+      <string>-Dcom.apple.mrj.application.apple.menu.about.name=trumpinator</string>
       <string>-Dcom.apple.smallTabs=true</string>
     </array>
     <key>JVMArguments</key>

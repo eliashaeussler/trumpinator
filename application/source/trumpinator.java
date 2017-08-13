@@ -50,7 +50,7 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class trump extends PApplet {
+public class trumpinator extends PApplet {
 
 /**
  * ===========
@@ -637,7 +637,7 @@ public void adFound() {
 }
   public void settings() {  fullScreen(); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "trump" };
+    String[] appletArgs = new String[] { "trumpinator" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {
