@@ -28,7 +28,7 @@ You have the following options on how to start the program:
 4. Press *Run* (or Cmd+R / Ctrl+R)
 
 ## Requirements
-There is just one thing you need: You need at least **Java 8** to run the program. It can be downloaded here: https://www.java.com/download/
+There is just one thing you need: Download and install at least **Java 8** to run the program. You can get the latest version of Java directly here: https://www.java.com/download/
 
 ## Resources we have used
 * Twitter4J (https://github.com/yusuke/twitter4j)
