@@ -32,10 +32,10 @@ import ddf.minim.*;
 private final String VERSION = "1.0";
 
 // Twitter API settings (DO NOT CHANGE UNLESS TWITTER CONNECTION IS NOT WORKING)
-private final String CONSUMER_KEY = "5si5P0GEefFMLjuH0JCz3e2Wu";
-private final String CONSUMER_SECRET = "Gpyn8W4aZBfEuZ9uIqvmbljZalgXLEDiXczvJabEsCWyMXEG8M";
-private final String ACCESS_TOKEN = "2273657383-ZOLTTbpsTUcU01g87EBWsn04TahGPckexKXR52Z";
-private final String ACCESS_SECRET = "1zxvsNQm6SBNfkSJFYyBE3qtFOmTXlUoizbhOKcLB4t7H";
+private final String CONSUMER_KEY = "iYzFBw5l6lUeNOysRUErIqSYW";
+private final String CONSUMER_SECRET = "dAmDUAb1Rxb4oBnBs6PAxC9JxmqHB5XzNe8l1jj1xZJ9qrNeMM";
+private final String ACCESS_TOKEN = "2273657383-693qHXCnCNdDUu6eVBd5tqm1rkgPxPyzFiApO5d";
+private final String ACCESS_SECRET = "BOCC2ZsgRV5ILGuwMXrTHMLsnRVzgfXXDMEC3sERJiqeU";
 
 // Number of latest statuses to be displayed
 private final int STATUS_COUNT = 200;
