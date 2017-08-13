@@ -27,6 +27,9 @@ You have the following options on how to start the program:
 3. Open the file *trumpinator.pde*. **Important: All files and folders need to be inside a folder called *trumpinator* (which they are, by default, when you clone the repository)**
 4. Press *Run* (or Cmd+R / Ctrl+R)
 
+## Requirements
+There is just one thing you need to run the program: You need at least **Java 8** to run the program. It can be downloaded here: https://www.java.com/download/
+
 ## Resources we have used
 * Twitter4J (https://github.com/yusuke/twitter4j)
 * Minim (https://github.com/ddf/Minim/)
