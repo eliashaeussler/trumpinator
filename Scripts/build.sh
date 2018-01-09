@@ -1,8 +1,8 @@
 #!/bin/bash
 
 myexe="./processing-3.3.6/processing-java"
-input_folder="."
-output_folder="/output"
+input_folder="trumpinator"
+output_folder="_output"
 
 if [ ! -e $myexe ]
 then
