@@ -1,6 +1,6 @@
 #!/bin/bash
 
-myexe="./processing-3.1.1/processing-java"
+myexe="./processing-3.3.6/processing-java"
 input_folder="."
 output_folder="/output"
 

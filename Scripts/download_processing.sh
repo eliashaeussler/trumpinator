@@ -1,5 +1,5 @@
 #!/bin/bash
-zipfile="processing-3.1.1-linux32.tgz"
+zipfile="processing-3.3.6-linux32.tgz"
 
 if [ ! -e $zipfile ]
 then
