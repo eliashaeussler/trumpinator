@@ -16,13 +16,11 @@ You can either run the program using the Processing project or the exported Buil
 4. Press *Run* (or Cmd+R / Ctrl+R)
 
 ### Build files
-Download the Build files for your Operating System and run them. The following systems are currently supported:
+Download the Build files from the [Releases](https://github.com/eliashaeussler/trumpinator/releases) section for your Operating System and run them. The following systems are currently supported:
 
 * macOS
 * Windows (32-/64-bit)
 * Linux (32-/64-bit)
-
-You can find the latest releases here: [Releases](https://github.com/eliashaeussler/trumpinator/releases)
 
 ## Requirements
 There is just one thing you need: Download and install at least **Java 8** to run the program. You can get the latest version of Java directly here: https://www.java.com/download/
