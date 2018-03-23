@@ -7,27 +7,22 @@ Welcome to Trumpinator, the world's best opportunity to deal with Donald Trump's
 *Trumpinator* is our new method to help you get rid of your bad mood in relation to Donald Trump. We all know that he's a unsuitable president and we want him to know our frustration about him. So we decided to develop a tiny program which reads the lastest 200 tweets of @realdonaldtrump and enables you to destroy all of them by screaming inside your computer's mic. You will see, it's freeing! :-)
 
 ## How to start
-You have the following options on how to start the program:
-* Built Windows application
-* Built macOS application
-* Processing source code
-
-**IMPORTANT: Do not change anything inside the *application.macos*, *application.win32* and *application.win64* folder, otherwise the program won't run properly!**
-
-### Windows application
-1. Clone or download the project from GitHub
-2. If you're using a 32 bit system: Open the file *application.win32/trumpinator.exe*
-3. If you're using a 64 bit system: Open the file *application.win64/trumpinator.exe*
-
-### macOS application
-1. Clone or download the project from GitHub
-2. Open the file *application.macos/trumpinator.app*
+You can either run the program using the Processing project or the exported Build files.
 
 ### Processing source code
 1. Clone or download the project from GitHub
 2. Open Processing
 3. Open the file *trumpinator.pde*. **Important: All files and folders need to be inside a folder called *trumpinator* (which they are, by default, when you clone the repository)**
 4. Press *Run* (or Cmd+R / Ctrl+R)
+
+### Build files
+Download the Build files for your Operating System and run them. The following systems are currently supported:
+
+* macOS
+* Windows (32-/64-bit)
+* Linux (32-/64-bit)
+
+You can find the latest releases here: [Releases](releases)
 
 ## Requirements
 There is just one thing you need: Download and install at least **Java 8** to run the program. You can get the latest version of Java directly here: https://www.java.com/download/

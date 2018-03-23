@@ -29,7 +29,7 @@ import java.net.*;
 import ddf.minim.*;
 
 // Software version
-private final String VERSION = "1.0";
+private final String VERSION = "1.0.0";
 
 // Twitter API settings (DO NOT CHANGE UNLESS TWITTER CONNECTION IS NOT WORKING)
 private final String CONSUMER_KEY = "iYzFBw5l6lUeNOysRUErIqSYW";
