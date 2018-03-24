@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/eliashaeussler/trumpinator.svg?token=vkQdh4FDH2sRrf94RJjF&branch=master)](https://travis-ci.com/eliashaeussler/trumpinator)
+![license](https://img.shields.io/github/license/eliashaeussler/trumpinator.svg)
 
 # Trumpinator
 Welcome to Trumpinator, the world's best opportunity to deal with Donald Trump's statements! Don't you like what he's talking about on Twitter? No problem, just scream everything you have on your mind inside your computer's mic and it will destroy all the crappy stuff @realdonaldtrump is talking about on Twitter!
