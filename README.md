@@ -36,8 +36,6 @@ Now click on the `Keys and Access Tokens` tab and copy the following data:
 * Access Token Secret
 
 
-
-
 ## Usage
 
 You can either run the program using the Processing project or the exported Build files.
@@ -78,6 +76,11 @@ Currently the following operating systems are supported:
 * `1-3`: Set audio input sensitivity (from low to high)
 * `m`: Show main menu
 * `Esc`: Quit program
+
+
+## Add your own fonts
+
+You can use your own fonts in `ttf` or `otf` format. Just copy them into the `trumpinator/data` folder and have fun :blush:
 
 
 ## Resources
