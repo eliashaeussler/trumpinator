@@ -22,6 +22,20 @@ of them by screaming inside your computer's mic. You will see, it's freeing! :gr
 * [Java 8+](https://www.java.com/download/)
 * [Processing](https://processing.org/)
 * Microphone
+* Twitter API credentials
+
+### How to create Twitter API credentials
+
+For this app to run, you need valid Twitter API credentials. To get one of them, head to [Twitter Application Management](https://apps.twitter.com/),
+sign in (or sign up) and click on `Create New App`. After giving some necessary information, your app will be created.
+Now click on the `Keys and Access Tokens` tab and copy the following data:
+
+* Consumer Key (API Key)
+* Consumer Secret (API Secret)
+* Access Token
+* Access Token Secret
+
+
 
 
 ## Usage
@@ -29,14 +43,23 @@ of them by screaming inside your computer's mic. You will see, it's freeing! :gr
 You can either run the program using the Processing project or the exported Build files.
 
 ### Processing source code
+
 1. Clone or download the project from GitHub
-2. Open Processing
-3. Open the file [trumpinator.pde](trumpinator/trumpinator.pde).
+2. Copy the [credentials.sample](trumpinator/credentials.sample) file to `credentials` and provide your Twitter API credentials:
+
+    ```bash
+    cd trumpinator
+    cp credentials.sample credentials
+    ```
+    
+3. Open Processing
+4. Open the file [trumpinator.pde](trumpinator/trumpinator.pde).
    **Important: All files and folders need to be inside a folder called *trumpinator* (which they are, by default, when
    you clone the repository)**
-4. Press `Run` or type `⌘`+`R` / `Ctrl`+`R`
+5. Press `Run` or hit `⌘`+`R` / `Ctrl`+`R`
 
 ### Build files
+
 Head to the [Releases](https://github.com/eliashaeussler/trumpinator/releases) section and download the binary files for
 your Operating System. After downloading, just run the binary file.
 
@@ -45,6 +68,8 @@ Currently the following operating systems are supported:
 * macOS
 * Windows (32-/64-bit)
 * Linux (32-/64-bit)
+
+**Note: The build files will be removed in a later release since it's now necessary to provide custom API credentials for Twitter.**
 
 
 ## Controls
