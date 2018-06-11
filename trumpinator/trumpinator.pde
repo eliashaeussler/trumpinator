@@ -116,7 +116,8 @@ void setup()
     showInstructions();
   } 
   catch (TwitterException e) {
-    error("Verbindung zu Twitter fehlgeschlagen.");
+    error("Failed to connect with Twitter." + "\n" + "Please make sure to provide valid API keys.");
+    print("Error during connection with Twitter:" + "\n\n" + e.getMessage());
   }
 }
 
@@ -136,14 +137,15 @@ void showInstructions()
   
   // Set texts
   String headline = "Trumpinator";
-  String description = "Hey, kennen Sie Donald Trump?\nSind Sie genau so fasziniert von ihm wie wir?\n" +
-                       "Dann ran an's Mikrofon! Schreien Sie sich die Seele aus dem Leib!\n" +
-                       "Zerstören Sie die total idiotischen Tweets von diesem Verrückten!\nHave fun ;)";
+  String description = "Hey, you know Donald Trump?" + "\n" +
+                       "You like his fascinating tweets he's producing day by day? Don't you?" + "\n" +
+                       "Then turn on your microphone and scream the f*ck out of you!" + "\n" +
+                       "Destroy these stupid tweets from this crazy man which are filled with lots of crappy stuff!";
   String[][] keys = new String[][] {
-    new String[] {"Space", "Nächster Tweet"},
-    new String[] {"1-3", "Empfindlichkeit des Mikrofons ändern"},
-    new String[] {"M", "Zurück zum Menü"},
-    new String[] {"Esc", "Beenden"}
+    new String[] {"Space", "Next Tweet"},
+    new String[] {"1-3", "Set audio input sensitivity"},
+    new String[] {"M", "Back to menu"},
+    new String[] {"Esc", "Quit"}
   };
   
   // Set shortcuts
@@ -219,7 +221,7 @@ void keyTyped()
   else
   {
     // Show error message if connection to twitter is not established
-    error("Verbindung zu Twitter fehlgeschlagen.");
+    error("Failed to connect with Twitter." + "\n" + "Please make sure to provide valid API keys.");
   }
 }
 
@@ -445,139 +447,5 @@ void error(String text)
     textFont(getFont("Sketchit"));
     textSize(25);
     text(text.trim(), width/2, height/2);
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-/*
-* THE ABOVE METHODS AREN'T USED CURRENTLY!
-*
-* Methods for an explosion if an adjctive was found.
-* Searching for adjectives. Comparing the words from the current tweet with an 
-* selfmade list full of adjectives. If one is found a new ArrayList with particles 
-* will be created. The explosion will be located random on the frame.
-*/
-
-private boolean explo;
-private float wr, hr;
-
-/*
-* Search for adjectives in the tweet
-*/
-void searchAd() {
-  String[] list = split(text, ' ');
-  ArrayList<String> words = new ArrayList<String>(Arrays.asList(list));
-  String adList[] = loadStrings("ad_list.txt");
-  //ArrayList<String> ads = new ArrayList<String>(Arrays.asList(adList));
-  HashSet<String> adjectives = new HashSet<String>();
-
-  for (String bw : adList) adjectives.add(bw);
-
-  for (String word : words) {
-
-    if (adjectives.contains(word)) {
-      println("I've got it! - " + word);
-      explo = true;
-      wr = random(width);
-      hr = random(height);
-      adFound();
-    }
-  }
-}
-
-/*
-* new class for new generated particles for the explosion
-*/
-ArrayList plist = new ArrayList();
-int MAX = 50;
-
-class Particle {
-  float r = 2;
-  PVector pos, speed, grav; 
-  ArrayList tail;
-  float splash = 5;
-  int margin = 2;
-  int taillength = 25;
-
-  Particle(float tempx, float tempy) {
-    float startx = tempx + random(-splash, splash);
-    float starty = tempy + random(-splash, splash);
-    startx = constrain(startx, 0, width);
-    starty = constrain(starty, 0, height);
-    float xspeed = random(-3, 3);
-    float yspeed = random(-3, 3);
-
-    pos = new PVector(startx, starty);
-    speed = new PVector(xspeed, yspeed);
-    grav = new PVector(0, 0.02);
-
-    tail = new ArrayList();
-  }
-
-  void run() {
-    pos.add(speed);
-
-    tail.add(new PVector(pos.x, pos.y, 0));
-    if (tail.size() > taillength) {
-      tail.remove(0);
-    }
-
-    float damping = random(-0.5, -0.6);
-    if (pos.x > width - margin || pos.x < margin) {
-      speed.x *= damping;
-    }
-    if (pos.y > height -margin) {
-      speed.y *= damping;
-    }
-  }
-
-  void gravity() {
-    speed.add(grav);
-  }
-
-  void update() {
-    for (int i = 0; i < tail.size(); i++) {
-      PVector tempv = (PVector)tail.get(i);
-      noStroke();
-      fill(6*i + 50);
-      ellipse(tempv.x, tempv.y, r, r);
-    }
-  }
-}
-
-/*
-* method for the expolison
-*/
-void explode() {
-  if (explo) {
-    for (int i = 0; i < plist.size(); i++) {
-      Particle p = (Particle) plist.get(i); 
-      //makes p a particle equivalent to ith particle in ArrayList
-      p.run();
-      p.update();
-      p.gravity();
-    }
-  }
-}
-
-/*
-* method for a new ArrayList with particles if adjective was found
-*/
-void adFound() {
-  for (int i = 0; i < MAX; i ++) {
-    plist.add(new Particle(wr, hr)); // fill ArrayList with particles
-
-    if (plist.size() > 5*MAX) {
-      plist.remove(0);
-    }
   }
 }
