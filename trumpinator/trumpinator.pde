@@ -29,7 +29,7 @@ import java.net.*;
 import ddf.minim.*;
 
 // Software version
-private final String VERSION = "1.0.0";
+private final String VERSION = "2.0.0";
 
 // Twitter API settings
 private Map<String, String> API_CREDENTIALS = new HashMap<String, String>();
