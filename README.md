@@ -19,8 +19,9 @@ of them by screaming inside your computer's mic. You will see, it's freeing! :gr
 
 ## Requirements
 
-There is just one thing you need: Download and install at least **Java 8** to run the program. You can get the latest
-version of Java directly here: https://www.java.com/download/
+* [Java 8+](https://www.java.com/download/)
+* [Processing](https://processing.org/)
+* Microphone
 
 
 ## Usage
@@ -44,6 +45,14 @@ Currently the following operating systems are supported:
 * macOS
 * Windows (32-/64-bit)
 * Linux (32-/64-bit)
+
+
+## Controls
+
+* `Space`: Show next tweet
+* `1-3`: Set audio input sensitivity (from low to high)
+* `m`: Show main menu
+* `Esc`: Quit program
 
 
 ## Resources
