@@ -31,11 +31,8 @@ import ddf.minim.*;
 // Software version
 private final String VERSION = "1.0.0";
 
-// Twitter API settings (DO NOT CHANGE UNLESS TWITTER CONNECTION IS NOT WORKING)
-private final String CONSUMER_KEY = "iYzFBw5l6lUeNOysRUErIqSYW";
-private final String CONSUMER_SECRET = "dAmDUAb1Rxb4oBnBs6PAxC9JxmqHB5XzNe8l1jj1xZJ9qrNeMM";
-private final String ACCESS_TOKEN = "2273657383-693qHXCnCNdDUu6eVBd5tqm1rkgPxPyzFiApO5d";
-private final String ACCESS_SECRET = "BOCC2ZsgRV5ILGuwMXrTHMLsnRVzgfXXDMEC3sERJiqeU";
+// Twitter API settings
+private Map<String, String> API_CREDENTIALS = new HashMap<String, String>();
 
 // Number of latest statuses to be displayed
 private final int STATUS_COUNT = 200;
@@ -95,17 +92,20 @@ void setup()
   minim = new Minim(this);
   input = minim.getLineIn(Minim.STEREO, 512);
 
-  // Twitter configuration
-  ConfigurationBuilder cb = new ConfigurationBuilder();
-  cb.setOAuthConsumerKey(CONSUMER_KEY);
-  cb.setOAuthConsumerSecret(CONSUMER_SECRET);
-  cb.setOAuthAccessToken(ACCESS_TOKEN);
-  cb.setOAuthAccessTokenSecret(ACCESS_SECRET);
-
-  // Connect to Twitter
-  twitter = new TwitterFactory(cb.build()).getInstance();
-
   try {
+    // Get Twitter credentials
+    getApiCredentials();
+    
+    // Set Twitter configuration
+    ConfigurationBuilder cb = new ConfigurationBuilder();
+    cb.setOAuthConsumerKey(API_CREDENTIALS.get("consumerKey"));
+    cb.setOAuthConsumerSecret(API_CREDENTIALS.get("consumerSecret"));
+    cb.setOAuthAccessToken(API_CREDENTIALS.get("accessToken"));
+    cb.setOAuthAccessTokenSecret(API_CREDENTIALS.get("accessSecret"));
+  
+    // Connect to Twitter
+    twitter = new TwitterFactory(cb.build()).getInstance();
+    
     // Get statuses
     timeline = twitter.getUserTimeline("realDonaldTrump", new Paging(1, STATUS_COUNT));
 
@@ -114,9 +114,9 @@ void setup()
     
     // Display user instructions
     showInstructions();
-  } 
-  catch (TwitterException e) {
-    error("Failed to connect with Twitter." + "\n" + "Please make sure to provide valid API keys.");
+    
+  } catch (Exception e) {
+    error("Connection to Twitter failed." + "\n" + "Please make sure to provide valid API keys.");
     print("Error during connection with Twitter:" + "\n\n" + e.getMessage());
   }
 }
@@ -221,7 +221,7 @@ void keyTyped()
   else
   {
     // Show error message if connection to twitter is not established
-    error("Failed to connect with Twitter." + "\n" + "Please make sure to provide valid API keys.");
+    error("Connection to Twitter failed." + "\n" + "Please make sure to provide valid API keys.");
   }
 }
 
@@ -423,6 +423,35 @@ float getAudioVolume()
   if ((int) average == 0) average++;
 
   return average;
+}
+
+/**
+ * Get Twitter API credentials and save them to global API_CREDENTIALS map.
+ */
+void getApiCredentials() throws Exception
+{
+  // Read credentials
+  String[] credentials = loadStrings("../credentials");
+  
+  if (credentials.length == 0) {
+    throw new Exception("Please provide a valid credentials file inside the project directory. Use credentials.sample as template and fill in your API keys.");
+  }
+  
+  for (String current : credentials)
+  {
+    // Save credentials to API_CREDENTIALS map
+    String[] contents = current.split(":");
+    if (contents.length == 2)
+    {
+      String key = contents[0].trim();
+      String value = contents[1].trim();
+      API_CREDENTIALS.put(key, value);
+    }
+    else
+    {
+      throw new Exception("Please provide valid Twitter credentials in the credentials file inside the project directory.");
+    }
+  }
 }
 
 /**
