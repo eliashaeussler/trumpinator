@@ -9,12 +9,18 @@ talking about on Twitter? No problem, just scream everything you have on your mi
 will destroy all the crappy stuff [@realdonaldtrump](https://twitter.com/realDonaldTrump) is talking about on Twitter!
 
 
+![Screenshot: Menu](images/menu.png)
+
+
 ## What the hell is that?
 
 *Trumpinator* is a new method to help you get rid of your bad mood in relation to Donald Trump. We all know that he's an
 unsuitable president and we want him to know our frustration about him. So we decided to develop a tiny program which
 reads the lastest 200 tweets of [@realdonaldtrump](https://twitter.com/realDonaldTrump) and enables you to destroy all
 of them by screaming inside your computer's mic. You will see, it's freeing! :grin:
+
+
+![Screenshot: Tweet](images/tweet.png)
 
 
 ## Requirements
