@@ -44,36 +44,26 @@ Now click on the `Keys and Access Tokens` tab and copy the following data:
 
 ## Usage
 
-You can either run the program using the Processing project or the exported Build files.
+Clone the repository at first:
 
-### Processing source code
+```bash
+git clone https://github.com/eliashaeussler/trumpinator.git
+cd trumpinator
+```
 
-1. Clone or download the project from GitHub
-2. Copy the [credentials.sample](trumpinator/credentials.sample) file to `credentials` and provide your Twitter API credentials:
+Now copy the [`credentials.sample`](trumpinator/credentials.sample) file and provide your Twitter API credentials
+(read [here](#how-to-create-twitter-api-credentials) how to get API credentials):
 
-    ```bash
-    cd trumpinator
-    cp credentials.sample credentials
-    ```
-    
-3. Open Processing
-4. Open the file [trumpinator.pde](trumpinator/trumpinator.pde).
-   **Important: All files and folders need to be inside a folder called *trumpinator* (which they are, by default, when
-   you clone the repository)**
-5. Press `Run` or hit `⌘`+`R` / `Ctrl`+`R`
+```bash
+cp trumpinator/credentials.sample trumpinator/credentials
+```
 
-### Build files
+Open the file [`trumpinator/trumpinator.pde`](trumpinator/trumpinator.pde) with Processing.
 
-Head to the [Releases](https://github.com/eliashaeussler/trumpinator/releases) section and download the binary files for
-your Operating System. After downloading, just run the binary file.
+**Note: All project files and folders need to be inside a folder called `trumpinator` (which they are, by default, after
+you have cloned the repository).**
 
-Currently the following operating systems are supported:
-
-* macOS
-* Windows (32-/64-bit)
-* Linux (32-/64-bit)
-
-**Note: The build files will be removed in a later release since it's now necessary to provide custom API credentials for Twitter.**
+Press `Run` or hit `⌘`+`R` / `Ctrl`+`R`.
 
 
 ## Controls
